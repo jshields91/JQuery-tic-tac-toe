@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <style type="text/css">
+
+        #page_container{
+            position:relative;
+        }
+        #game_container{
+            position:relative;
+            width:325px;
+            left:35%;
+        }
+        #game_container *{
+            text-align:center;
+        }
+        #table_div{
+            position:relative;
+            left:20%;
+        }
+        #container {
+            border: 1px solid black;
+            clear: both;
+            float: left;
+            
+        }
+
+        #container .block {
+            cursor:crosshair;
+            float: left;
+            border: 1px solid black;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            font-size: 50px;
+            text-align:center;           
+        }
+
+        .clear {
+            clear: both;
+            line-height: 0px;
+        }
+
+        #container .player1_block {
+            color: green;
+        }
+
+        #container .player2_block {
+            color: orange;
+        }
+        #container .hover{
+            background: #CEFFFF;
+        }
+        #container .win{
+            background: #d3e7dc;
+        }
+        #player_mark, #player_name{
+            padding: 0px 3px;
+        }
+        .end_game{
+            display: none;
+        }
+		
+		#table_div{
+			position:relative;
+			float:left;
+		}
+        table{
+            clear:both;  
+            border:thick black double;
+            background:#99FF99;  
+            left: 20%;                
+        }
+        td{
+            text-align: center;
+        }
+                
+        table, th, td {
+		border:thick black double;
+		border-collapse:collapse;
+		}
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        var player1 = {
+            mark: 'X',
+            name: 'Player 1',
+            style: 'player1_block',
+            score_el: 'player1_wins',
+            wins: 0
+        };
+
+        var player2 = {
+            mark: 'O',
+            name: 'Player 2',
+            style: 'player2_block',
+            score_el: 'player2_wins',
+            wins: 0
+        };
+        var players = [player1, player2];
+        var current_player = 0;
+        var cols = rows = 3;
+        $(document).ready(function () {
+            $("#restart_game").bind("click", restartGame);
+          
+
+            $.expr[":"].mod = function (el, i, m) {
+                return i % m[3] === 0
+            };
+            $.expr[":"].sub_mod = function (el, i, m) {
+                var params = m[3].split(",");
+                return (i - params[0]) % params[1] === 0
+            };
+            startGame();
+        });
+        function startGame() {
+            $("#container").empty();
+            for (var i = 0; i < cols * rows; ++i) {
+                var block = $("<div></div>")
+                            .addClass("block")
+                            .appendTo("#container");
+               
+
+                if (i % cols === 0) {
+                    block.before('<div class="clear"></div>');
+                }
+
+            }
+
+            $("#container .block")
+                .bind("click", playMove)
+                .bind('mouseover', hoverblock)
+                .bind('mouseout', leaveblock);
+
+            yourTurn(current_player);
+        };
+        function endGame(ev) {
+            $("#container .block")
+                .unbind("click")
+                .unbind("mouseover")
+                .unbind("mouseout");
+        };
+        function restartGame(ev) {
+            ev.preventDefault();
+            $(".end_game").hide();
+            current_player = 0;
+            startGame();
+            return false;
+        }
+        function playMove(ev) {
+            var block = $(this);
+            block
+                .addClass(players[current_player].style)
+                .addClass("marked")
+                .text(players[current_player].mark)
+                .trigger("mouseout")
+                .unbind("click mouseover mouseout");
+
+         
+
+            if (!checkWin()) {
+               
+                current_player = (++current_player) % players.length;
+                yourTurn(current_player);
+            }
+            return false;
+        };
+
+        function yourTurn() {
+            $("#player_name").text(players[current_player].name);
+            $("#player_mark").text(players[current_player].mark);
+        };
+        function hoverblock(ev) {
+            $(this).addClass("hover");
+            return false;
+        };
+        function leaveblock(ev) {
+            $(this).removeClass("hover");
+            return false;
+        };
+
+        function checkWin() {
+      
+            var current_class = players[current_player].style;
+            var marked_blocks = $("#container ." + current_class);
+            var win = false;
+            if (marked_blocks.length >= cols) {
+                
+                var blocks = $("#container .block");
+                var player_blocks = {};
+                for (var row = 1; row <= rows && !win; ++row) {
+                    player_blocks = blocks
+                                        .filter(":lt(" + cols * row + ")")
+                                        .filter(":eq(" + (cols * (row - 1)) + "),:gt(" + (cols * (row - 1)) + ")")
+                                        .filter("." + current_class);
+                    if (player_blocks.length == cols) win = true;
+                }
+               
+                for (var col = 0; col <= cols && !win; ++col) {
+                    player_blocks = blocks
+                                        .filter(":sub_mod(" + col + "," + rows + ")")
+                                        .filter("." + current_class);
+
+                    if (player_blocks.length == rows) win = true;
+                }
+                
+                if (!win) {
+                    player_blocks = blocks
+                                        .filter(":mod(" + (rows + 1) + ")")
+                                        .filter("." + current_class);
+                    if (player_blocks.length == rows) win = true;
+                    else {
+                        
+                        player_blocks = blocks
+                                            .filter(":mod(" + (rows - 1) + "):not(:last,:first)")
+                                            .filter("." + current_class);
+                        if (player_blocks.length == rows) win = true;
+                    }
+                }
+            }
+
+            if (win) {
+                endGame();
+                player_blocks.addClass("win");
+                ++players[current_player].wins;
+                alert(players[current_player].name + ' is the winner!');
+                $("#" + players[current_player].score_el).text(players[current_player].wins);
+                $(".end_game").show();
+            } else {
+                
+                if ($("#container .marked").length == rows * cols) {
+                	alert('Cat Scratch! Aka.. Tie..');
+                    $(".end_game").show();
+                    $("#ask_restart").show();
+                    
+                }
+            }
+            return win;
+        };
+        
+            </script>
+</head>
+<body>
+    <div id="page_container">
+        <div id="game_container">
+            <h1>Tic-Tac-Toe</h1>
+            <nav>
+				<a href="/">Home</a> |
+				<a href="/tictactoe.html">Tic-Tac-Toe</a> |
+				<a href="/registration.html">Registration Form</a> |
+				<a href="/contact.html">Contact Us</a> |
+				<a href="/faq.html">FAQ</a>	
+			</nav>
+
+            <h2><span id="player_mark"></span>'s turn!</h2>
+             <div id="ask_restart" class="end_game">
+                <a href="#" id="restart_game">Play Again?</a>
+            </div>
+            <div id="container">
+            </div>
+            
+            <div id="table_div">
+            <br/>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>Player 1</th>
+                        <th>Player 2</th>
+                    </tr>
+                    <tr>
+                        <th>Won</th>
+                        <td id="player1_wins">0</td>
+                        <td id="player2_wins">0</td>
+                    </tr>
+                </table>  
+            </div>                                   
+        </div>
+    </div>
+</body>
+</html>

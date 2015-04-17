@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Contact Us</title>
+<script src="jquery.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/additional-methods.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/additional-methods.min.js"></script>
+<script type="text/javascript">
+$( "#conForm" ).validate({
+	rules: {
+		email: {
+			required: true,
+			email: true
+		}
+	}
+});
+</script>
+
+</head>
+
+<body>
+<h1>Contact Us</h1>
+<nav>
+	<a href="/">Home</a> |
+	<a href="/tictactoe.html">Tic-Tac-Toe</a> |
+	<a href="/registration.html">Registration Form</a> |
+	<a href="/contact.html">Contact Us</a> |
+	<a href="/faq.html">FAQ</a>	
+</nav>
+
+<form id="conForm" method="get" action="">
+
+<label for="email">Email (Required):</label><br />
+<input id="email" type="text" name="email" required>
+<br/>
+<label for="fname">Full Name (Required):</label><br />
+<input id="fname" type="text" name="Full Name" required>
+<br/>
+<label for="comment">Comment (Required)</label><br/>
+<input id="comment" type="text" name="comment" required style="width:500px; height:100px">
+<br/>
+<input type="submit" value="submit">
+</form>
+
+</body>
+
+</html>

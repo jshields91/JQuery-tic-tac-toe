@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Register</title>
+<script src="jquery.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/jquery.validate.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/additional-methods.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.1/additional-methods.min.js"></script>
+<script type="text/javascript">
+$( "#regForm" ).validate();
+</script>
+</head>
+
+<body>
+<h1>Registration Form</h1>
+<nav>
+	<a href="/">Home</a> |
+	<a href="/tictactoe.html">Tic-Tac-Toe</a> |
+	<a href="/registration.html">Registration Form</a> |
+	<a href="/contact.html">Contact Us</a> |
+	<a href="/faq.html">FAQ</a>	
+</nav>
+
+<form id="regForm" method="get" action="">
+<fieldset>
+<label for="mail">Email (Required):</label><br />
+<input id="mail" type="text" name="mail" required>
+<br/>
+<label for="fname">First Name (Required):</label><br />
+<input id="fname" type="text" name="First Name" minlength="2" required>
+<br/>
+<label for="mname">Middle Name (Required):</label><br />
+<input id="mname" type="text" name="Middle Name" minlength="2" required>
+<br/>
+<label for="lname">Last Name (Required):</label><br />
+<input id="lname" type="text" name="Last Name" minlength="2" required>
+<br/>
+<label for="scode">Secret Code:</label><br />
+<input id="scode" type="text" name="Secret Code">
+<br/>
+<input class="submit" type="submit" value="submit">
+</fieldset>
+</form>
+
+</body>
+
+</html>
